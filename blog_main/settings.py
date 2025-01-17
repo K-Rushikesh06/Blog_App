@@ -17,11 +17,12 @@ import os
 BASE_DIR = Path(__file__).resolve().parent.parent
 STATIC_DIR=os.path.join(BASE_DIR,'static')
 
+
 # Quick-start development settings - unsuitable for production
 # See https://docs.djangoproject.com/en/5.1/howto/deployment/checklist/
 
 # SECURITY WARNING: keep the secret key used in production secret!
-SECRET_KEY = 'django-insecure-cc39#qr0m88ag1sjltj4jtvf)tmb=5g0(hahgi$h+tpw9tx1&7'
+SECRET_KEY = 'django-insecure-bh6zy_6u5_=qbisp0lxgr-#@)ak8u_l02s$8k)$1z4v__dab$('
 
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
@@ -38,6 +39,10 @@ INSTALLED_APPS = [
     'django.contrib.sessions',
     'django.contrib.messages',
     'django.contrib.staticfiles',
+    'blogs',
+    'crispy_forms',
+    'crispy_bootstrap4',
+    'dashboards',
 ]
 
 MIDDLEWARE = [
@@ -63,6 +68,7 @@ TEMPLATES = [
                 'django.template.context_processors.request',
                 'django.contrib.auth.context_processors.auth',
                 'django.contrib.messages.context_processors.messages',
+                'blogs.context_processors.get_category'
             ],
         },
     },
@@ -116,9 +122,15 @@ USE_TZ = True
 # Static files (CSS, JavaScript, Images)
 # https://docs.djangoproject.com/en/5.1/howto/static-files/
 
-STATIC_URL = 'static/'
+STATIC_URL = '/static/'
 STATICFILES_DIRS = [BASE_DIR / "static"]
+STATIC_ROOT = BASE_DIR / "staticfiles"
+
 # Default primary key field type
 # https://docs.djangoproject.com/en/5.1/ref/settings/#default-auto-field
 
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
+#Media files configuration
+MEDIA_URL='/media/'
+MEDIA_ROOT=BASE_DIR/'media'
+CRISPY_TEMPLATE_PACK = 'bootstrap4'
