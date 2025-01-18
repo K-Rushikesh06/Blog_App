@@ -1,7 +1,9 @@
-from django.shortcuts import render, HttpResponse, get_object_or_404
-from .models import Blogs, Category,Comment
+from django.shortcuts import render, HttpResponse, get_object_or_404,redirect
+from .models import Blogs, Category, Comment
 from django.shortcuts import get_object_or_404
 from django.db.models import Q
+from django.http import HttpResponseRedirect
+
 
 def posts_by_category(request,category_id):
     category = get_object_or_404(Category, pk=category_id)
@@ -15,16 +17,42 @@ def posts_by_category(request,category_id):
     return render(request, 'posts_by_category.html', context)
     
 #blogs
-def blogs(request,slug):
-   single_post= get_object_or_404(Blogs,slug=slug,status='published')
-   
-   comments = Comment.objects.filter(blog = single_post)
-   
-   context={
-    'single_post':single_post,
-    'comments':comments
-   }
-   return render(request,'blogs.html',context)
+
+def blogs(request, slug):
+
+    # Handle POST request to save the comment
+    single_post = get_object_or_404(Blogs, slug=slug, status='published')
+    if request.method == "POST":
+        if request.user.is_authenticated:
+            comment_text = request.POST.get('comment')
+            if comment_text:
+                comment = Comment()
+                comment.user = request.user
+                comment.blog = single_post # Use the correct variable 'blog' here
+                comment.comment = request.POST['comment']
+                comment.save()
+
+            # Redirect to the same page to display the new comment
+                return HttpResponseRedirect(request.path_info)
+        else:
+            # If the user is not authenticated, redirect to login page
+            return redirect('login')
+
+    # Fetch all comments related to the current blog post
+    comments = Comment.objects.filter(blog=single_post)  # Use the correct variable 'blog' here
+
+    comment_count = comments.count()
+
+    # Add comments and other data to the context
+    context = {
+        'single_post': single_post,  # Make sure the correct variable 'blog' is passed to the template
+        'comments': comments,
+        'comment_count': comment_count
+    }
+
+    return render(request, 'blogs.html', context)
+    
+
 
    #search Functionality
 def search(request):

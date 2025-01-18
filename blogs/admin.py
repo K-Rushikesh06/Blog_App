@@ -11,8 +11,9 @@ class BlogAdmin(admin.ModelAdmin):
     list_editable=('is_featured',)
 
 class CommentAdmin(admin.ModelAdmin):
-    list_display = ('id', 'user', 'blog', 'comments', 'created_at', 'updated_at')
-    search_fields = ('user__username', 'blog__title', 'comments')    
+    list_display = ('id', 'user', 'blog', 'comment', 'created_at', 'updated_at')
+    search_fields = ('user__username', 'blog__title', 'comments')  
+      
 admin.site.register(Category,CategoryAdmin)
 admin.site.register(Blogs,BlogAdmin)
 admin.site.register(Comment, CommentAdmin)
